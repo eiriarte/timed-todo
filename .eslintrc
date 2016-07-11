@@ -1,0 +1,13 @@
+{
+  "plugins": [
+    "react"
+  ],
+  "extends": ["google", "plugin:react/recommended"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "require-jsdoc": "off"
+  }
+}

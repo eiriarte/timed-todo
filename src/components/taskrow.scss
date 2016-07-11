@@ -1,0 +1,26 @@
+.task-row {
+  margin: 8px;
+  .task-title, .task-duration, .pause-duration {
+    padding-left: 8px;
+  }
+  .task-input {
+    margin-left: 8px;
+  }
+  .task-duration {
+    opacity: 0.54;
+  }
+  .subtask-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .pause {
+    font-size: 80%;
+    .pause-duration {
+      opacity: 0.54;
+    }
+  }
+  &.current {
+    font-weight: bold;
+  }
+}
