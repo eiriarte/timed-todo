@@ -54,7 +54,7 @@ export default class TaskRow extends React.Component {
           const current = (this.props.currentId === task.id);
           return <TaskRow {...task} key={task.id} id={task.id} current={current}
               onChecked={this.props.onChecked}
-              onEdited={this.props.onChecked}
+              onEdited={this.props.onEdited}
               currentId={this.props.currentId}/>;
         }) }
       </ul>;
