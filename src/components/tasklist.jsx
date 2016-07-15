@@ -9,7 +9,9 @@ export default class TaskList extends React.Component {
       <ul className="task-list">
         { this.props.tasks.map(task => {
           const current = (this.props.currentId === task.id);
-          return <TaskRow {...task} key={task.id} id={task.id} current={current}
+          const estimated = (this.props.estimatedId === task.id);
+          return <TaskRow {...task} key={task.id} id={task.id}
+            current={current} estimated={estimated}
             onChecked={this.props.onChecked}
             onRemoved={this.props.onRemoved}
             onEdited={this.props.onEdited}
@@ -25,5 +27,6 @@ TaskList.propTypes = {
   onChecked: React.PropTypes.func.isRequired,
   onRemoved: React.PropTypes.func.isRequired,
   onEdited: React.PropTypes.func.isRequired,
-  currentId: React.PropTypes.string
+  currentId: React.PropTypes.string,
+  estimatedId: React.PropTypes.string
 };

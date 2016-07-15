@@ -31,6 +31,7 @@ export default class TimedProject extends React.Component {
           </button>
         </h1>
         <TaskList tasks={this.state.tasks} currentId={this.state.current}
+          estimatedId={this.state.estimated ? this.state.estimated.id : null}
           onChecked={this._handleCheck}
           onEdited={this._editTask}
           onRemoved={this._removeTask}/>
@@ -54,6 +55,7 @@ export default class TimedProject extends React.Component {
     const current = working ? this.state.current : undefined;
     if (working) {
       this._firstTick = Date.now();
+      this.props.project.init();
       this._timer = setInterval(this._tick, 500);
     } else {
       clearInterval(this._timer);
@@ -69,8 +71,9 @@ export default class TimedProject extends React.Component {
     const interval = worked - this.state.worked;
 
     const [tasks, current] = this.props.project.updateTasks(interval, worked);
+    const estimated = this.props.project.getEstimated(worked);
 
-    this.setState({tasks, worked, current});
+    this.setState({tasks, worked, current, estimated});
   }
 
   _handleCheck(id, checked) {

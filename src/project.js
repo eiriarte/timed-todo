@@ -3,7 +3,7 @@ import uuid from 'node-uuid';
 import jsonfile from 'jsonfile';
 
 const PROJECT_FILE = process.env[(process.platform === 'win32') ?
-	'USERPROFILE' : 'HOME'] + '/.project.json';
+  'USERPROFILE' : 'HOME'] + '/.project.json';
 
 function showWriteErrorBox() {
   dialog.showErrorBox('Error al guardar en disco',
@@ -42,7 +42,54 @@ export default class Project {
     return this._project.tasks;
   }
 
-  updateTasks(interval, worked) {
+  init(tasks) {
+    if (!tasks) {
+      tasks = this._project.tasks;
+      this._start = 0;
+    }
+    for (let task of tasks) {
+      if (task.subtasks && task.subtasks.length > 0) {
+        if (this.init(task.subtasks)) {
+          return true; // Inicialización completada
+        }
+      } else {
+        if (!task.done) {
+          this._start += task.elapsed || 0;
+          return true; // Inicialización completada
+        }
+        this._start += task.duration || 0;
+      }
+    }
+  }
+
+  getEstimated(total, tasks) {
+    if (!tasks) {
+      tasks = this._project.tasks;
+      total += this._start;
+    }
+    for (let task of tasks) {
+      if (task.subtasks && task.subtasks.length > 0) {
+        let result = this.getEstimated(total, task.subtasks);
+        if (typeof result === 'object') {
+          return result;
+        }
+        total = result;
+      } else {
+        total -= task.duration;
+        if (total < 0) {
+          // Encontrada la tarea que debería estar haciéndose según la estimación
+          return task;
+        }
+      }
+    }
+
+    if (tasks === this._project.tasks) {
+      return undefined; // Deberían estar hechas TODAS las tareas
+    }
+    return total;
+  }
+
+  updateTasks(interval) {
     const currentTask = this._getCurrent();
     if (!currentTask) return;
     if (currentTask.pause && currentTask.pause.active) {

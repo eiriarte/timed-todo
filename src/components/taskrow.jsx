@@ -46,16 +46,19 @@ export default class TaskRow extends React.Component {
     let pause = '';
     let className = 'task-row' +
       (this.props.done ? ' done' : '') +
-      (this.props.current ? ' current' : '');
+      (this.props.current ? ' current' : '') +
+      (this.props.estimated ? ' estimated' : '');
 
     if (this.props.subtasks && this.props.subtasks.length > 0) {
       subtasks = <ul className="subtask-list">
         { this.props.subtasks.map(task => {
           const current = (this.props.currentId === task.id);
-          return <TaskRow {...task} key={task.id} id={task.id} current={current}
-              onChecked={this.props.onChecked}
-              onEdited={this.props.onEdited}
-              currentId={this.props.currentId}/>;
+          const estimated = (this.props.estimatedId === task.id);
+          return <TaskRow {...task} key={task.id} id={task.id}
+            current={current} estimated={estimated}
+            onChecked={this.props.onChecked}
+            onEdited={this.props.onEdited}
+            currentId={this.props.currentId}/>;
         }) }
       </ul>;
     }
@@ -112,7 +115,9 @@ TaskRow.propTypes = {
   pause: React.PropTypes.object,
   subtasks: React.PropTypes.array,
   currentId: React.PropTypes.string,
+  estimatedId: React.PropTypes.string,
   current: React.PropTypes.bool,
+  estimated: React.PropTypes.bool,
   editing: React.PropTypes.bool
 };
 

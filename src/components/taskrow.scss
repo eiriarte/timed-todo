@@ -23,4 +23,7 @@
   &.current {
     font-weight: bold;
   }
+  &.estimated {
+    color: darkgreen;
+  }
 }
