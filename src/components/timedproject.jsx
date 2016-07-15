@@ -13,6 +13,7 @@ export default class TimedProject extends React.Component {
     };
 
     this._tick = this._tick.bind(this);
+    this._persistTick = this._persistTick.bind(this);
     this._handleCheck = this._handleCheck.bind(this);
     this._handlePause = this._handlePause.bind(this);
     this._removeTask = this._removeTask.bind(this);
@@ -48,6 +49,7 @@ export default class TimedProject extends React.Component {
 
   componentWillUnmount() {
     clearInterval(this._timer);
+    clearInterval(this._persistTimer);
   }
 
   _toggleWorking() {
@@ -57,10 +59,16 @@ export default class TimedProject extends React.Component {
       this._firstTick = Date.now();
       this.props.project.init();
       this._timer = setInterval(this._tick, 500);
+      this._persistTimer = setInterval(this._persistTick, 60000);
     } else {
       clearInterval(this._timer);
+      clearInterval(this._persistTimer);
     }
     this.setState({working, current});
+  }
+
+  _persistTick() {
+    this.props.project.save();
   }
 
   _tick() {

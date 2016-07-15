@@ -34,6 +34,10 @@ export default class Project {
     }
   }
 
+  save() {
+    this._save();
+  }
+
   get title() {
     return this._project.title;
   }
@@ -97,7 +101,6 @@ export default class Project {
     } else {
       currentTask.elapsed = (currentTask.elapsed || 0) + interval;
     }
-    this._save();
     return [this._project.tasks, currentTask.id];
   }
 
