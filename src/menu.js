@@ -15,8 +15,17 @@ const menuTemplate = [
         }
       },
       {
+        label: 'Add subtask',
+        accelerator: 'CmdOrCtrl+Shift+N',
+        click: function(item, focusedWindow) {
+          if (focusedWindow) {
+            focusedWindow.webContents.send('newsub');
+          }
+        }
+      },
+      {
         label: 'Pause',
-        accelerator: 'P',
+        accelerator: 'CmdOrCtrl+P',
         click: function(item, focusedWindow) {
           if (focusedWindow) {
             focusedWindow.webContents.send('pause');

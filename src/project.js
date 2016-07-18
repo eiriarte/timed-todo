@@ -165,14 +165,37 @@ export default class Project {
     this._save();
   }
 
-  addNew() {
-    this._project.tasks.push({
+  addNew(id, type, tasks = this._project.tasks) {
+    let i;
+    let len = tasks.length;
+    const newTask = {
       id: uuid.v4(),
       title: '',
       done: false,
       editing: true
-    });
-    this._save();
+    };
+
+    if (!id) {
+      tasks.push(newTask);
+      return;
+    }
+
+    for (i = 0; i < len; i++) {
+      if (tasks[i].id === id) {
+        if (type === 'TASK') {
+          tasks.splice(i + 1, 0, newTask);
+        } else if (type === 'SUBTASK') {
+          if (!tasks[i].subtasks) {
+            tasks[i].subtasks = [];
+          }
+          tasks[i].subtasks.push(newTask);
+        }
+        this._save();
+        return;
+      } else if (tasks[i].subtasks && tasks[i].subtasks.length > 0) {
+        this.addNew(id, type, tasks[i].subtasks);
+      }
+    }
   }
 
   edit(data) {
@@ -189,14 +212,15 @@ export default class Project {
 
     for (i = 0; i < len; i++) {
       if (tasks[i].id === id) {
-        return tasks.splice(i, 1);
+        let result = tasks.splice(i, 1);
+        this._save();
+        return result;
       } else if (tasks[i].subtasks && tasks[i].subtasks.length > 0) {
         if (this.remove(id, tasks[i].subtasks)) {
           return true;
         }
       }
     }
-    this._save();
     return false;
   }
 }

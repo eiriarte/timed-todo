@@ -35,6 +35,7 @@ export default class TimedProject extends React.Component {
           estimatedId={this.state.estimated ? this.state.estimated.id : null}
           onChecked={this._handleCheck}
           onEdited={this._editTask}
+          onAddNew={this._newTask}
           onRemoved={this._removeTask}/>
       </div>
     );
@@ -42,9 +43,7 @@ export default class TimedProject extends React.Component {
 
   componentDidMount() {
     Mousetrap.bind('p', this._handlePause);
-
     ipcRenderer.on('pause', this._handlePause);
-    ipcRenderer.on('new', this._newTask);
   }
 
   componentWillUnmount() {
@@ -103,8 +102,9 @@ export default class TimedProject extends React.Component {
     this.props.project.pause();
   }
 
-  _newTask() {
-    this.props.project.addNew();
+  _newTask(id, type) {
+    this.props.project.addNew(id, type);
+    this.setState({tasks: this.state.tasks});
   }
 }
 
