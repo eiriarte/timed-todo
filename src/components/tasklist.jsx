@@ -7,6 +7,7 @@ import TaskRow from './taskrow.jsx';
 export default class TaskList extends React.Component {
   constructor(props) {
     super(props);
+    this._selectTask = this._selectTask.bind(this);
     this.state = {
       selected: this.props.tasks.length && this.props.tasks[0].id
     };
@@ -23,6 +24,7 @@ export default class TaskList extends React.Component {
             onChecked={this.props.onChecked}
             onRemoved={this.props.onRemoved}
             onEdited={this.props.onEdited}
+            onSelected={this._selectTask}
             currentId={this.props.currentId}
             selectedId={this.state.selected}/>;
         }) }
@@ -33,6 +35,14 @@ export default class TaskList extends React.Component {
   componentDidMount() {
     Mousetrap.bind('up', () => this._handleMove('UP'));
     Mousetrap.bind('down', () => this._handleMove('DOWN'));
+  }
+
+  _selectTask(taskId) {
+    if (taskId) {
+      this.setState({
+        selected: taskId
+      });
+    }
   }
 
   _handleMove(direction) {

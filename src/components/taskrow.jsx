@@ -11,6 +11,7 @@ export default class TaskRow extends React.Component {
       editingPause: Boolean(this.props.pause && this.props.pause.editing)
     };
     this._handleChange = this._handleChange.bind(this);
+    this._handleSelect = this._handleSelect.bind(this);
     this._handleEdit = this._handleEdit.bind(this);
     this._handleInputKeys = this._handleInputKeys.bind(this);
   }
@@ -19,7 +20,11 @@ export default class TaskRow extends React.Component {
     this.props.onChecked(this.props.id, event.target.checked);
   }
 
-  _handleEdit(event) {
+  _handleSelect() {
+    this.props.onSelected(this.props.id);
+  }
+
+  _handleEdit() {
     this.setState({editing: true});
   }
 
@@ -59,7 +64,9 @@ export default class TaskRow extends React.Component {
           return <TaskRow {...task} key={task.id} id={task.id}
             current={current} estimated={estimated} selected={selected}
             onChecked={this.props.onChecked}
+            onRemoved={this.props.onRemoved}
             onEdited={this.props.onEdited}
+            onSelected={this.props.onSelected}
             currentId={this.props.currentId}
             selectedId={this.props.selectedId}/>;
         }) }
@@ -93,7 +100,8 @@ export default class TaskRow extends React.Component {
       <li className={className}>
         <input type="checkbox" checked={this.props.done}
           onChange={this._handleChange}/>
-        <span className="task-title" onDoubleClick={this._handleEdit}>
+        <span className="task-title" onDoubleClick={this._handleEdit}
+          onClick={this._handleSelect}>
           {this.props.title}
         </span>
         <span className="task-duration">
@@ -113,6 +121,7 @@ TaskRow.propTypes = {
   onChecked: React.PropTypes.func.isRequired,
   onRemoved: React.PropTypes.func.isRequired,
   onEdited: React.PropTypes.func.isRequired,
+  onSelected: React.PropTypes.func.isRequired,
   elapsed: React.PropTypes.number,
   duration: React.PropTypes.number,
   pause: React.PropTypes.object,
