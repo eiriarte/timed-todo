@@ -26,4 +26,7 @@
   &.estimated {
     color: darkgreen;
   }
+  &.selected {
+    background-color: lightgray;
+  }
 }
