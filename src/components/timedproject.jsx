@@ -1,6 +1,5 @@
 import {ipcRenderer} from 'electron';
 import React from 'react';
-import Mousetrap from 'mousetrap';
 import TaskList from './tasklist.jsx';
 
 export default class TimedProject extends React.Component {
@@ -42,7 +41,6 @@ export default class TimedProject extends React.Component {
   }
 
   componentDidMount() {
-    Mousetrap.bind('p', this._handlePause);
     ipcRenderer.on('pause', this._handlePause);
   }
 
@@ -100,6 +98,7 @@ export default class TimedProject extends React.Component {
 
   _handlePause() {
     this.props.project.pause();
+    this.setState({tasks: this.state.tasks});
   }
 
   _newTask(id, type) {
