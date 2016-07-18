@@ -24,6 +24,15 @@ const menuTemplate = [
         }
       },
       {
+        label: 'Delete task',
+        accelerator: 'CmdOrCtrl+Backspace',
+        click: function(item, focusedWindow) {
+          if (focusedWindow) {
+            focusedWindow.webContents.send('del');
+          }
+        }
+      },
+      {
         label: 'Pause',
         accelerator: 'CmdOrCtrl+P',
         click: function(item, focusedWindow) {

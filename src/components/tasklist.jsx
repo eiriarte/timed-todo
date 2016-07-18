@@ -8,7 +8,7 @@ import TaskRow from './taskrow.jsx';
 export default class TaskList extends React.Component {
   constructor(props) {
     super(props);
-    this._newTask = this._newTask.bind(this);
+    this._deleteTask = this._deleteTask.bind(this);
     this._selectTask = this._selectTask.bind(this);
     this.state = {
       selected: this.props.tasks.length ? this.props.tasks[0].id : ''
@@ -39,10 +39,15 @@ export default class TaskList extends React.Component {
     Mousetrap.bind('down', () => this._handleMove('DOWN'));
     ipcRenderer.on('new', () => this._newTask('TASK'));
     ipcRenderer.on('newsub', () => this._newTask('SUBTASK'));
+    ipcRenderer.on('del', this._deleteTask);
   }
 
   _newTask(type) {
     this.props.onAddNew(this.state.selected, type);
+  }
+
+  _deleteTask() {
+    this.props.onRemoved(this.state.selected);
   }
 
   _selectTask(taskId) {
