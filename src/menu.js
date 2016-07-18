@@ -42,8 +42,21 @@ const menuTemplate = [
         }
       }
     ]
-  }
-];
+  },
+  {
+    label: 'Edit',
+    submenu: [
+      {
+        role: 'cut'
+      },
+      {
+        role: 'copy'
+      },
+      {
+        role: 'paste'
+      }
+    ]
+  }];
 
 if (process.platform === 'darwin') {
   // const name = app.getName();
