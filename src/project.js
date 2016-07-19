@@ -210,10 +210,15 @@ export default class Project {
 
   edit(data) {
     const task = this._getTaskById(data.id);
+    let wasNewTask = false;
     if (task) {
+      if (task.title === '') {
+        wasNewTask = true;
+      }
       Object.assign(task, data);
+      this._save();
     }
-    this._save();
+    return wasNewTask;
   }
 
   remove(id, tasks = this._project.tasks) {

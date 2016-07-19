@@ -99,7 +99,10 @@ export default class TimedProject extends React.Component {
   }
 
   _editTask(data) {
-    this.props.project.edit(data);
+    const wasNewTask = this.props.project.edit(data);
+    if (wasNewTask) {
+      this._newTask(data.id, 'TASK');
+    }
     this.setState({tasks: this.state.tasks});
   }
 
