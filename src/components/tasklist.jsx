@@ -46,7 +46,10 @@ export default class TaskList extends React.Component {
   }
 
   _newTask(type) {
-    this.props.onAddNew(this.state.selected, type);
+    const newId = this.props.onAddNew(this.state.selected, type);
+    this.setState({
+      selected: newId
+    });
   }
 
   _deleteTask() {

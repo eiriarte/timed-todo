@@ -177,7 +177,7 @@ export default class Project {
 
     if (!id) {
       tasks.push(newTask);
-      return;
+      return newTask.id;
     }
 
     for (i = 0; i < len; i++) {
@@ -191,9 +191,12 @@ export default class Project {
           tasks[i].subtasks.push(newTask);
         }
         this._save();
-        return;
+        return newTask.id;
       } else if (tasks[i].subtasks && tasks[i].subtasks.length > 0) {
-        this.addNew(id, type, tasks[i].subtasks);
+        const newId = this.addNew(id, type, tasks[i].subtasks);
+        if (newId) {
+          return newId;
+        }
       }
     }
   }

@@ -109,8 +109,9 @@ export default class TimedProject extends React.Component {
   }
 
   _newTask(id, type) {
-    this.props.project.addNew(id, type);
+    const newId = this.props.project.addNew(id, type);
     this.setState({tasks: this.state.tasks});
+    return newId;
   }
 }
 
