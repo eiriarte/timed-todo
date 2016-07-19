@@ -9,6 +9,7 @@ export default class TaskList extends React.Component {
   constructor(props) {
     super(props);
     this._deleteTask = this._deleteTask.bind(this);
+    this._editTask = this._editTask.bind(this);
     this._selectTask = this._selectTask.bind(this);
     this._handleEdit = this._handleEdit.bind(this);
     this.state = {
@@ -27,7 +28,7 @@ export default class TaskList extends React.Component {
             current={current} estimated={estimated} selected={selected}
             onChecked={this.props.onChecked}
             onRemoved={this.props.onRemoved}
-            onEdited={this.props.onEdited}
+            onEdited={this._editTask}
             onSelected={this._selectTask}
             currentId={this.props.currentId}
             selectedId={this.state.selected}/>;
@@ -62,6 +63,13 @@ export default class TaskList extends React.Component {
         selected: taskId
       });
     }
+  }
+
+  _editTask(data) {
+    const newSelected = this.props.onEdited(data);
+    this.setState({
+      selected: newSelected
+    });
   }
 
   _handleEdit() {
