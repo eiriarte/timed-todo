@@ -45,7 +45,13 @@ app.on('activate', () => {
 });
 
 app.on('ready', () => {
+  let reactDevTools = '/Users/eduardo/Library/Application Support/Google/';
+  reactDevTools += 'Chrome/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi';
+  reactDevTools += '/0.14.11_0';
+  electron.BrowserWindow.addDevToolsExtension(reactDevTools);
+
   mainWindow = createMainWindow();
+
   const menu = Menu.buildFromTemplate(menuTemplate);
   Menu.setApplicationMenu(menu);
 });
