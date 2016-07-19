@@ -54,16 +54,18 @@ export default class TimedProject extends React.Component {
   _toggleWorking() {
     const working = !this.state.working;
     const current = working ? this.state.current : undefined;
+    let worked = this.state.worked;
     if (working) {
       this._firstTick = Date.now();
       this.props.project.init();
       this._timer = setInterval(this._tick, 500);
       this._persistTimer = setInterval(this._persistTick, 60000);
+      worked = 0;
     } else {
       clearInterval(this._timer);
       clearInterval(this._persistTimer);
     }
-    this.setState({working, current});
+    this.setState({working, current, worked});
   }
 
   _persistTick() {
