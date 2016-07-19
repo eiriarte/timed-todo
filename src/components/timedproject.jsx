@@ -17,6 +17,7 @@ export default class TimedProject extends React.Component {
     this._handlePause = this._handlePause.bind(this);
     this._removeTask = this._removeTask.bind(this);
     this._newTask = this._newTask.bind(this);
+    this._taskEditMode = this._taskEditMode.bind(this);
     this._editTask = this._editTask.bind(this);
     this._toggleWorking = this._toggleWorking.bind(this);
   }
@@ -34,6 +35,7 @@ export default class TimedProject extends React.Component {
           estimatedId={this.state.estimated ? this.state.estimated.id : null}
           onChecked={this._handleCheck}
           onEdited={this._editTask}
+          onEditMode={this._taskEditMode}
           onAddNew={this._newTask}
           onRemoved={this._removeTask}/>
       </div>
@@ -88,6 +90,11 @@ export default class TimedProject extends React.Component {
 
   _removeTask(id) {
     this.props.project.remove(id);
+    this.setState({tasks: this.state.tasks});
+  }
+
+  _taskEditMode(id) {
+    this.props.project.editMode(id);
     this.setState({tasks: this.state.tasks});
   }
 

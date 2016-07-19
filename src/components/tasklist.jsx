@@ -10,10 +10,12 @@ export default class TaskList extends React.Component {
     super(props);
     this._deleteTask = this._deleteTask.bind(this);
     this._selectTask = this._selectTask.bind(this);
+    this._handleEdit = this._handleEdit.bind(this);
     this.state = {
       selected: this.props.tasks.length ? this.props.tasks[0].id : ''
     };
   }
+
   render() {
     return (
       <ul className="task-list">
@@ -37,6 +39,7 @@ export default class TaskList extends React.Component {
   componentDidMount() {
     Mousetrap.bind('up', () => this._handleMove('UP'));
     Mousetrap.bind('down', () => this._handleMove('DOWN'));
+    Mousetrap.bind('enter', this._handleEdit);
     ipcRenderer.on('new', () => this._newTask('TASK'));
     ipcRenderer.on('newsub', () => this._newTask('SUBTASK'));
     ipcRenderer.on('del', this._deleteTask);
@@ -55,6 +58,12 @@ export default class TaskList extends React.Component {
       this.setState({
         selected: taskId
       });
+    }
+  }
+
+  _handleEdit() {
+    if (this.state.selected) {
+      this.props.onEditMode(this.state.selected);
     }
   }
 
@@ -98,6 +107,7 @@ TaskList.propTypes = {
   tasks: React.PropTypes.array.isRequired,
   onChecked: React.PropTypes.func.isRequired,
   onRemoved: React.PropTypes.func.isRequired,
+  onEditMode: React.PropTypes.func.isRequired,
   onEdited: React.PropTypes.func.isRequired,
   onAddNew: React.PropTypes.func.isRequired,
   currentId: React.PropTypes.string,

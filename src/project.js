@@ -198,6 +198,13 @@ export default class Project {
     }
   }
 
+  editMode(id) {
+    const task = this._getTaskById(id);
+    if (task) {
+      task.editing = true;
+    }
+  }
+
   edit(data) {
     const task = this._getTaskById(data.id);
     if (task) {

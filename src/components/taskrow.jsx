@@ -16,6 +16,14 @@ export default class TaskRow extends React.Component {
     this._handleInputKeys = this._handleInputKeys.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.editing !== this.props.editing) {
+      this.setState({
+        editing: Boolean(nextProps.editing)
+      });
+    }
+  }
+
   _handleChange(event) {
     this.props.onChecked(this.props.id, event.target.checked);
   }
