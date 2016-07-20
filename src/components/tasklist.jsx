@@ -31,6 +31,7 @@ export default class TaskList extends React.Component {
             onEdited={this._editTask}
             onSelected={this._selectTask}
             currentId={this.props.currentId}
+            estimatedId={this.props.estimatedId}
             selectedId={this.state.selected}/>;
         }) }
       </ul>

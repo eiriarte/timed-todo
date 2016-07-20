@@ -76,6 +76,7 @@ export default class TaskRow extends React.Component {
             onEdited={this.props.onEdited}
             onSelected={this.props.onSelected}
             currentId={this.props.currentId}
+            estimatedId={this.props.estimatedId}
             selectedId={this.props.selectedId}/>;
         }) }
       </ul>;
