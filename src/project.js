@@ -116,7 +116,7 @@ export default class Project {
   }
 
   setChecked(id, checked) {
-    const task = this._getTaskById(id);
+    const [task] = this._getTaskById(id);
     task.done = checked;
     if (!checked && task.pause && task.pause.active) {
       task.pause.active = false;
@@ -137,16 +137,18 @@ export default class Project {
   }
 
   _getTaskById(id, tasks = this._project.tasks) {
-    for (let task of tasks) {
+    for (let i = 0, len = tasks.length; i < len; i++) {
+      let task = tasks[i];
       if (task.id === id) {
-        return task;
+        return [task, tasks, i];
       } else if (task.subtasks && task.subtasks.length > 0) {
-        task = this._getTaskById(id, task.subtasks);
-        if (task) {
-          return task;
+        let [subtask, taskList, index] = this._getTaskById(id, task.subtasks);
+        if (subtask) {
+          return [subtask, taskList, index];
         }
       }
     }
+    return [];
   }
 
   pause() {
@@ -202,23 +204,41 @@ export default class Project {
   }
 
   editMode(id) {
-    const task = this._getTaskById(id);
+    const [task] = this._getTaskById(id);
     if (task) {
       task.editing = true;
     }
   }
 
   edit(data) {
-    const task = this._getTaskById(data.id);
+    const [task, taskList, index] = this._getTaskById(data.id);
     let wasNewTask = false;
+    let lastId = data.id;
+    const numCopies = data.numCopies || 1;
+
+    delete data.numCopies;
+
     if (task) {
       if (task.title === '') {
         wasNewTask = true;
       }
       Object.assign(task, data);
+
+      // Añade numCopies - 1 copias
+      for (let i = 1; i < numCopies; i++) {
+        const copy = Object.assign({}, task, {
+          id: uuid.v4(),
+          elapsed: 0,
+          done: false
+        });
+        delete copy.subtasks;
+        taskList.splice(index + i, 0, copy);
+        lastId = copy.id;
+      }
+
       this._save();
     }
-    return wasNewTask;
+    return [wasNewTask, lastId];
   }
 
   remove(id, tasks = this._project.tasks) {

@@ -56,41 +56,73 @@ const utils = {
   },
 
   newTask(id, text) {
-    const reMinutes = /^(\d+)m$/i;
-    const reHours = /^(\d+)h$/i;
-    const reHHMM = /^(\d+):(\d\d?)h$/i;
     const split = text.trim().split(' ');
-    const duration = split.pop();
-    let match;
-    let hours = 0;
-    let minutes = 0;
-    let title = split.join(' ');
+    const lastToken = split.pop();
+    const secondLastToken = split.pop();
+    let numCopies;
+    let duration;
 
-    match = reMinutes.exec(duration);
-    if (match) {
-      minutes = Number(match[1]);
+    numCopies = parseNumCopies(lastToken);
+    if (typeof numCopies === 'undefined') {
+      numCopies = 1;
+      split.push(secondLastToken);
+      duration = parseDuration(lastToken);
+      if (typeof duration === 'undefined') {
+        duration = 0;
+        split.push(lastToken);
+      }
     } else {
-      match = reHours.exec(duration);
-      if (match) {
-        hours = Number(match[1]);
-      } else {
-        match = reHHMM.exec(duration);
-        if (match) {
-          hours = Number(match[1]);
-          minutes = Number(match[2]);
-        } else {
-          title += ' ' + duration;
-        }
+      duration = parseDuration(secondLastToken);
+      if (typeof duration === 'undefined') {
+        duration = 0;
+        split.push(secondLastToken);
       }
     }
 
-    return {
-      id: id,
-      title: title,
-      duration: ONE_HOUR * hours + ONE_MINUTE * minutes,
-      editing: false
-    };
+    const title = split.join(' ');
+
+    return {id, title, duration, numCopies, editing: false};
   }
 };
+
+function parseNumCopies(num) {
+  const re = /^(\d+)x$/i;
+  const match = re.exec(num);
+
+  if (match) {
+    return Number(match[1]);
+  }
+
+  return undefined;
+}
+
+function parseDuration(duration) {
+  const reMinutes = /^(\d+)m$/i;
+  const reHours = /^(\d+)h$/i;
+  const reHHMM = /^(\d+):(\d\d?)h$/i;
+  let match;
+  let hours = 0;
+  let minutes = 0;
+
+  match = reMinutes.exec(duration);
+  if (match) {
+    minutes = Number(match[1]);
+  } else {
+    match = reHours.exec(duration);
+    if (match) {
+      hours = Number(match[1]);
+    } else {
+      match = reHHMM.exec(duration);
+      if (match) {
+        hours = Number(match[1]);
+        minutes = Number(match[2]);
+      } else {
+        return undefined;
+      }
+    }
+  }
+
+  return ONE_HOUR * hours + ONE_MINUTE * minutes;
+}
 
 export default utils;
