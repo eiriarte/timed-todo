@@ -1,0 +1,6 @@
+{
+  "name"    : "Timed",
+  "version" : "0.1.0",
+  "description": "Timed TODO list with subtasks and everything",
+  "main"    : "main.js"
+}
