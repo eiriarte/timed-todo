@@ -29,7 +29,7 @@ export default class TimedProject extends React.Component {
     return (
       <div className="project">
         <header className="project-title">
-          {this.props.project.title || 'Nuevo proyecto'}
+          {this.props.project.title || 'TODO Today'}
           <button onClick={this._toggleWorking}>
             {this.state.working ? 'Parar' : 'Empezar'}
           </button>
