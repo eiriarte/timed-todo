@@ -4,10 +4,25 @@ const ONE_HOUR = 3600000;
 const ONE_MINUTE = 60000;
 
 const utils = {
-  getHHMM(task, duration = false) {
+  getHHMMFormat(time, withSeconds) {
     let format;
+    const sign = time < 0 ? '-' : '';
+
+    if (sign === '-') {
+      time = -time;
+    }
+
+    if (withSeconds) {
+      format = time >= ONE_HOUR ? 'H:mm:ss' : 'mm:ss';
+    } else {
+      format = time >= ONE_HOUR ? 'H:mm[h]' : 'mm[m]';
+    }
+
+    return sign + moment.utc(time).format(format);
+  },
+
+  getHHMM(task, duration = false) {
     let time;
-    let sign;
 
     if (duration) {
       time = task.duration || '';
@@ -22,19 +37,8 @@ const utils = {
       time = task.elapsed || 0;
     }
 
-    sign = time < 0 ? '-' : '';
-    if (sign === '-') {
-      time = -time;
-    }
-
-    if (!duration && task.current) {
-      format = time >= ONE_HOUR ? 'H:mm:ss' : 'mm:ss';
-    } else {
-      format = time >= ONE_HOUR ? 'H:mm[h]' : 'mm[m]';
-    }
-
     if (time) {
-      return sign + moment.utc(time).format(format);
+      return this.getHHMMFormat(time, !duration && task.current);
     }
     return '';
   },

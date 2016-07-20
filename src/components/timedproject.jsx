@@ -1,6 +1,9 @@
+require('./timedproject.scss');
+
 import {ipcRenderer} from 'electron';
 import React from 'react';
 import TaskList from './tasklist.jsx';
+import utils from '../utils';
 
 export default class TimedProject extends React.Component {
   constructor(props) {
@@ -25,12 +28,12 @@ export default class TimedProject extends React.Component {
   render() {
     return (
       <div className="project">
-        <h1 className="project-title">
+        <header className="project-title">
           {this.props.project.title || 'Nuevo proyecto'}
           <button onClick={this._toggleWorking}>
             {this.state.working ? 'Parar' : 'Empezar'}
           </button>
-        </h1>
+        </header>
         <TaskList tasks={this.state.tasks} currentId={this.state.current}
           estimatedId={this.state.estimated ? this.state.estimated.id : null}
           onChecked={this._handleCheck}
@@ -38,6 +41,9 @@ export default class TimedProject extends React.Component {
           onEditMode={this._taskEditMode}
           onAddNew={this._newTask}
           onRemoved={this._removeTask}/>
+        <footer className="project-footer">
+          {utils.getHHMMFormat(this.state.worked, true)}
+        </footer>
       </div>
     );
   }

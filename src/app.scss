@@ -5,22 +5,3 @@ html, body {
 	cursor: default;
 	font: caption;
 }
-
-body {
-	header {
-		position: absolute;
-		width: 500px;
-		height: 250px;
-		top: 50%;
-		left: 50%;
-		margin-top: -125px;
-		margin-left: -250px;
-		text-align: center;
-		h1 {
-			font-size: 60px;
-			font-weight: bold;
-			margin: 0;
-			padding: 0;
-		}
-	}
-}
