@@ -79,7 +79,8 @@ export default class TimedProject extends React.Component {
   }
 
   _tick() {
-    if (!this.state.working || this.state.tasks.length === 0) return;
+    if (!this.state.working ||
+      (this.state.tasks && this.state.tasks.length === 0)) return;
 
     const tack = Date.now();
     const worked = tack - this._firstTick;
@@ -87,8 +88,14 @@ export default class TimedProject extends React.Component {
 
     const [tasks, current] = this.props.project.updateTasks(interval, worked);
     const estimated = this.props.project.getEstimated(worked);
+    const working = Boolean(current);
 
-    this.setState({tasks, worked, current, estimated});
+    if (!working) {
+      clearInterval(this._timer);
+      clearInterval(this._persistTimer);
+    }
+
+    this.setState({tasks, worked, working, current, estimated});
   }
 
   _handleCheck(id, checked) {

@@ -95,7 +95,7 @@ export default class Project {
 
   updateTasks(interval) {
     const currentTask = this._getCurrent();
-    if (!currentTask) return;
+    if (!currentTask) return [this._project.tasks];
     if (currentTask.pause && currentTask.pause.active) {
       currentTask.pause.elapsed += interval;
     } else {
