@@ -91,8 +91,10 @@ export default class TimedProject extends React.Component {
   }
 
   _removeTask(id) {
+    const nextId = this.props.project.getAdjacentTask(id);
     this.props.project.remove(id);
     this.setState({tasks: this.state.tasks});
+    return nextId;
   }
 
   _taskEditMode(id) {

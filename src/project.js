@@ -151,6 +151,15 @@ export default class Project {
     return [];
   }
 
+  getAdjacentTask(id) {
+    const [task, taskList, index] = this._getTaskById(id);
+    if (!taskList || taskList.length < 2) {
+      return task.parent;
+    }
+    let adjacentTask = taskList[index + 1] || taskList[index - 1];
+    return adjacentTask.id;
+  }
+
   pause() {
     const currentTask = this._getCurrent();
     if (!currentTask) return;
@@ -167,14 +176,15 @@ export default class Project {
     this._save();
   }
 
-  addNew(id, type, tasks = this._project.tasks) {
+  addNew(id, type, parent = undefined, tasks = this._project.tasks) {
     let i;
     let len = tasks.length;
     const newTask = {
       id: uuid.v4(),
       title: '',
       done: false,
-      editing: true
+      editing: true,
+      parent: type === 'SUBTASK' ? id : parent
     };
 
     if (!id) {
@@ -195,7 +205,7 @@ export default class Project {
         this._save();
         return newTask.id;
       } else if (tasks[i].subtasks && tasks[i].subtasks.length > 0) {
-        const newId = this.addNew(id, type, tasks[i].subtasks);
+        const newId = this.addNew(id, type, tasks[i].id, tasks[i].subtasks);
         if (newId) {
           return newId;
         }

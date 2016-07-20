@@ -27,7 +27,7 @@ export default class TaskList extends React.Component {
           return <TaskRow {...task} key={task.id} id={task.id}
             current={current} estimated={estimated} selected={selected}
             onChecked={this.props.onChecked}
-            onRemoved={this.props.onRemoved}
+            onRemoved={this._deleteTask}
             onEdited={this._editTask}
             onSelected={this._selectTask}
             currentId={this.props.currentId}
@@ -54,7 +54,12 @@ export default class TaskList extends React.Component {
   }
 
   _deleteTask() {
-    this.props.onRemoved(this.state.selected);
+    const nextId = this.props.onRemoved(this.state.selected);
+    if (nextId) {
+      this.setState({
+        selected: nextId
+      });
+    }
   }
 
   _selectTask(taskId) {
