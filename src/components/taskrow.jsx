@@ -14,6 +14,7 @@ export default class TaskRow extends React.Component {
     this._handleSelect = this._handleSelect.bind(this);
     this._handleEdit = this._handleEdit.bind(this);
     this._handleInputKeys = this._handleInputKeys.bind(this);
+    this._finishEdit = this._finishEdit.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -36,6 +37,14 @@ export default class TaskRow extends React.Component {
     this.setState({editing: true});
   }
 
+  _finishEdit() {
+    if (this.props.title) {
+      this.setState({editing: false});
+    } else {
+      this.props.onRemoved(this.props.id);
+    }
+  }
+
   _handleInputKeys(event) {
     switch (event.key) {
       case 'Enter':
@@ -43,11 +52,7 @@ export default class TaskRow extends React.Component {
         this.setState({editing: false});
         break;
       case 'Escape':
-        if (this.props.title) {
-          this.setState({editing: false});
-        } else {
-          this.props.onRemoved(this.props.id);
-        }
+        this._finishEdit();
         break;
       default:
         // Tratamiento por defecto
@@ -99,6 +104,7 @@ export default class TaskRow extends React.Component {
           <input className="task-input" type="text" autoFocus
             defaultValue={utils.getSyntax(this.props)}
             placeholder="Write blog post… 1:30h"
+            onBlur={this._finishEdit}
             onKeyDown={this._handleInputKeys}/>
           { pause }
         </li>
