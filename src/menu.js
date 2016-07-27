@@ -75,9 +75,9 @@ if (process.platform === 'darwin') {
     }, {
       type: 'separator'
     }, {
-      label: `Hide ${name}`
-      // accelerator: 'Command+H',
-      // role: 'hide'
+      label: `Hide ${name}`,
+      accelerator: 'Command+H',
+      role: 'hide'
     }, {
       label: 'Hide Others',
       accelerator: 'Command+Alt+H',
