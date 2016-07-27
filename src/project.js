@@ -268,4 +268,16 @@ export default class Project {
     }
     return false;
   }
+
+  getTotalDuration(tasks = this._project.tasks) {
+    let total = 0;
+    tasks.forEach(task => {
+      if (task.subtasks && task.subtasks.length > 0) {
+        total += this.getTotalDuration(task.subtasks);
+      } else {
+        total += task.duration || 0;
+      }
+    });
+    return total;
+  }
 }

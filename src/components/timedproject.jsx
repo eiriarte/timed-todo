@@ -42,7 +42,12 @@ export default class TimedProject extends React.Component {
           onAddNew={this._newTask}
           onRemoved={this._removeTask}/>
         <footer className="project-footer">
-          {utils.getHHMMFormat(this.state.worked, true)}
+          <div className="total-duration">
+            {utils.getHHMMFormat(this._getTotalDuration(), false)}
+          </div>
+          <div className="total-worked">
+            {utils.getHHMMFormat(this.state.worked, true)}
+          </div>
         </footer>
       </div>
     );
@@ -135,6 +140,10 @@ export default class TimedProject extends React.Component {
     const newId = this.props.project.addNew(id, type);
     this.setState({tasks: this.state.tasks});
     return newId;
+  }
+
+  _getTotalDuration() {
+    return this.props.project.getTotalDuration();
   }
 }
 
