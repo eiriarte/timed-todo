@@ -286,7 +286,7 @@ export default class Project {
         deviation += subdeviation;
       } else {
         total += task.duration || 0;
-        if (task.done && typeof task.duration !== undefined) {
+        if (task.done && task.duration) {
           deviation += task.duration - task.elapsed;
         }
       }
