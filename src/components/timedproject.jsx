@@ -77,17 +77,18 @@ export default class TimedProject extends React.Component {
     const working = !this.state.working;
     const current = working ? this.state.current : undefined;
     let worked = this.state.worked;
+    let elapsed = this.state.elapsed;
     if (working) {
       this._firstTick = Date.now();
       this.props.project.init();
       this._timer = setInterval(this._tick, 500);
       this._persistTimer = setInterval(this._persistTick, 60000);
-      worked = 0;
+      worked = elapsed = 0;
     } else {
       clearInterval(this._timer);
       clearInterval(this._persistTimer);
     }
-    this.setState({working, current, worked});
+    this.setState({working, current, elapsed, worked});
   }
 
   _persistTick() {
@@ -99,10 +100,15 @@ export default class TimedProject extends React.Component {
       (this.state.tasks && this.state.tasks.length === 0)) return;
 
     const tack = Date.now();
-    const worked = tack - this._firstTick;
-    const interval = worked - this.state.worked;
+    const elapsed = tack - this._firstTick;
+    const interval = elapsed - (this.state.elapsed || 0);
+    let worked = this.state.worked || 0;
 
-    const [tasks, current] = this.props.project.updateTasks(interval, worked);
+    if (!this.props.project.isPaused()) {
+      worked += interval;
+    }
+
+    const [tasks, current] = this.props.project.updateTasks(interval);
     const estimated = this.props.project.getEstimated(worked);
     const working = Boolean(current);
 
@@ -111,7 +117,7 @@ export default class TimedProject extends React.Component {
       clearInterval(this._persistTimer);
     }
 
-    this.setState({tasks, worked, working, current, estimated});
+    this.setState({tasks, elapsed, worked, working, current, estimated});
   }
 
   _handleCheck(id, checked) {

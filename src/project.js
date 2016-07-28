@@ -176,6 +176,11 @@ export default class Project {
     this._save();
   }
 
+  isPaused() {
+    const currentTask = this._getCurrent();
+    return currentTask && currentTask.pause && currentTask.pause.active;
+  }
+
   addNew(id, type, parent = undefined, tasks = this._project.tasks) {
     let i;
     let len = tasks.length;
