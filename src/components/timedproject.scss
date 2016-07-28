@@ -20,17 +20,15 @@
     float: right;
 
     .positive {
-      padding-left: 8px;
       color: green;
       &::before {
-        content: '-';
+        content: ' - ';
       }
     }
     .negative {
-      padding-left: 8px;
       color: red;
       &::before {
-        content: '+';
+        content: ' + ';
       }
     }
   }
