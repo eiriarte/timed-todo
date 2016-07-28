@@ -26,6 +26,16 @@ export default class TimedProject extends React.Component {
   }
 
   render() {
+    let [totalDuration, totalDeviation] = this.props.project.getTotalDuration();
+    let htmlDeviation = '';
+
+    if (totalDeviation !== 0 && Math.abs(totalDeviation > 6000)) {
+      htmlDeviation =
+        <span className={ totalDeviation > 0 ? 'positive' : 'negative' }>
+          { utils.getHHMMFormat(totalDeviation, false) }
+        </span>;
+    }
+
     return (
       <div className="project">
         <header className="project-title">
@@ -43,7 +53,8 @@ export default class TimedProject extends React.Component {
           onRemoved={this._removeTask}/>
         <footer className="project-footer">
           <div className="total-duration">
-            {utils.getHHMMFormat(this._getTotalDuration(), false)}
+            {utils.getHHMMFormat(totalDuration, false)}
+            {htmlDeviation}
           </div>
           <div className="total-worked">
             {utils.getHHMMFormat(this.state.worked, true)}
@@ -140,10 +151,6 @@ export default class TimedProject extends React.Component {
     const newId = this.props.project.addNew(id, type);
     this.setState({tasks: this.state.tasks});
     return newId;
-  }
-
-  _getTotalDuration() {
-    return this.props.project.getTotalDuration();
   }
 }
 

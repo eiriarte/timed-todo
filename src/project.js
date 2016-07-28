@@ -271,13 +271,21 @@ export default class Project {
 
   getTotalDuration(tasks = this._project.tasks) {
     let total = 0;
+    let deviation = 0;
+    let subtotal;
+    let subdeviation;
     tasks.forEach(task => {
       if (task.subtasks && task.subtasks.length > 0) {
-        total += this.getTotalDuration(task.subtasks);
+        [subtotal, subdeviation] = this.getTotalDuration(task.subtasks);
+        total += subtotal;
+        deviation += subdeviation;
       } else {
         total += task.duration || 0;
+        if (task.done && typeof task.duration !== undefined) {
+          deviation += task.duration - task.elapsed;
+        }
       }
     });
-    return total;
+    return [total, deviation];
   }
 }

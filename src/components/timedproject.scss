@@ -18,5 +18,20 @@
 
   .total-duration {
     float: right;
+
+    .positive {
+      padding-left: 8px;
+      color: green;
+      &::before {
+        content: '-';
+      }
+    }
+    .negative {
+      padding-left: 8px;
+      color: red;
+      &::before {
+        content: '+';
+      }
+    }
   }
 }
